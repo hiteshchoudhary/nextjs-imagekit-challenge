@@ -47,70 +47,75 @@ function videoBasicsToParams(b: VideoBasics): string[] {
 /* ---------------- OVERLAYS ---------------- */
 
 function overlaysToParams(overlays: Overlay[]): string[] {
-  const parts: string[] = [];
+  return overlays
+    .map(o => {
+      if (o.type === "text" && o.text) {
+        const params: string[] = ["l-text"];
 
-  overlays.forEach(o => {
-    if (o.type === "image") {
-      const params: string[] = ["l-image"];
-      params.push(`i-${o.src}`);
-      if (o.width) params.push(`w-${o.width}`);
-      if (o.height) params.push(`h-${o.height}`);
-      if (o.x !== undefined) params.push(`x-${o.x}`);
-      if (o.y !== undefined) params.push(`y-${o.y}`);
-      if (o.opacity !== undefined) params.push(`o-${o.opacity}`);
-      if (o.bgColor) params.push(`bg-${o.bgColor}`);
-      if (o.border) params.push(`b-${o.border}`);
-      if (o.radius !== undefined) params.push(`r-${o.radius}`);
-      if (o.rotation !== undefined) params.push(`rt-${o.rotation}`);
-      if (o.flip) params.push(`fl-${o.flip}`);
-      params.push("l-end");
-      parts.push(params.join(","));
-    }
+        const hasSpecialChars = /[^a-zA-Z0-9@\-_]/.test(o.text);
+        if (hasSpecialChars) {
+          const encoded = encodeURIComponent(btoa(o.text));
+          params.push(`ie-${encoded}`);
+        } else {
+          params.push(`i-${o.text}`);
+        }
 
-    if (o.type === "text") {
-      const params: string[] = ["l-text"];
-      params.push(`i-${encodeURIComponent(o.text)}`);
-      if (o.fontSize) params.push(`fs-${o.fontSize}`);
-      if (o.fontFamily) params.push(`ff-${o.fontFamily}`);
-      if (o.color) params.push(`co-${o.color}`);
-      if (o.backgroundColor) params.push(`bg-${o.backgroundColor}`);
-      if (o.padding) params.push(`pa-${o.padding}`);
-      if (o.align) params.push(`lfo-${o.align}`);
-      if (o.bold) params.push("b-true");
-      if (o.italic) params.push("i-true");
-      if (o.strike) params.push("s-true");
-      if (o.rotation !== undefined) params.push(`rt-${o.rotation}`);
-      if (o.flip) params.push(`fl-${o.flip}`);
-      params.push("l-end");
-      parts.push(params.join(","));
-    }
+        if (o.fontSize) params.push(`fs-${o.fontSize}`);
+        if (o.fontFamily) params.push(`ff-${o.fontFamily}`);
+        if (o.color) params.push(`co-${o.color}`);
+        if (o.backgroundColor) params.push(`bg-${o.backgroundColor}`);
+        if (o.padding) params.push(`pa-${o.padding}`);
+        if (o.align) params.push(`ia-${o.align}`);
 
-    if (o.type === "gradient") {
-      const params: string[] = ["l-image", "i-ik_canvas", "e-gradient"];
-      if (o.direction !== undefined) params.push(`ld-${o.direction}`);
-      if (o.fromColor) params.push(`from-${o.fromColor}`);
-      if (o.toColor) params.push(`to-${o.toColor}`);
-      if (o.stopPoint !== undefined) params.push(`sp-${o.stopPoint}`);
-      if (o.width) params.push(`w-${o.width}`);
-      if (o.height) params.push(`h-${o.height}`);
-      if (o.radius) params.push(`r-${o.radius}`);
-      params.push("l-end");
-      parts.push(params.join(","));
-    }
+        const typography: string[] = [];
+        if (o.bold) typography.push("b");
+        if (o.italic) typography.push("i");
+        if (o.strike) typography.push("strikethrough");
+        if (typography.length > 0) params.push(`tg-${typography.join("_")}`);
 
-    if (o.type === "solid") {
-      const params: string[] = ["l-image", "i-ik_canvas"];
-      if (o.color) params.push(`bg-${o.color}`);
-      if (o.width) params.push(`w-${o.width}`);
-      if (o.height) params.push(`h-${o.height}`);
-      if (o.opacity !== undefined) params.push(`o-${o.opacity}`);
-      if (o.radius) params.push(`r-${o.radius}`);
-      params.push("l-end");
-      parts.push(params.join(","));
-    }
-  });
+        if (o.x !== undefined) params.push(`lx-${o.x}`);
+        if (o.y !== undefined) params.push(`ly-${o.y}`);
+        if (o.rotation !== undefined) params.push(`rt-${o.rotation}`);
+        if (o.flip) params.push(`fl-${o.flip}`);
+        params.push("l-end");
+        return params.join(",");
+      }
 
-  return parts;
+      if (o.type === "gradient" && o.fromColor && o.toColor) {
+        const gradientParams = [`from-${o.fromColor}`, `to-${o.toColor}`];
+        if (o.direction !== undefined)
+          gradientParams.unshift(`ld-${o.direction}`);
+        if (o.stopPoint !== undefined) gradientParams.push(`sp-${o.stopPoint}`);
+
+        const params: string[] = [
+          "l-image",
+          "i-ik_canvas",
+          `e-gradient-${gradientParams.join("_")}`,
+        ];
+        if (o.width) params.push(`w-${o.width}`);
+        if (o.height) params.push(`h-${o.height}`);
+        if (o.x !== undefined) params.push(`lx-${o.x}`);
+        if (o.y !== undefined) params.push(`ly-${o.y}`);
+        params.push("l-end");
+        return params.join(",");
+      }
+
+      if (o.type === "solid") {
+        const params: string[] = ["l-image", "i-ik_canvas"];
+        if (o.color) params.push(`bg-${o.color}`);
+        if (o.width) params.push(`w-${o.width}`);
+        if (o.height) params.push(`h-${o.height}`);
+        if (o.x !== undefined) params.push(`lx-${o.x}`);
+        if (o.y !== undefined) params.push(`ly-${o.y}`);
+        if (o.opacity !== undefined) params.push(`o-${o.opacity}`);
+        if (o.radius) params.push(`r-${o.radius}`);
+        params.push("l-end");
+        return params.join(",");
+      }
+
+      return "";
+    })
+    .filter(Boolean);
 }
 
 function videoOverlaysToParams(overlays: VideoOverlay[]): string[] {
@@ -289,18 +294,27 @@ export function buildTrString(config: TransformationConfig): string {
     if (config.enhancements)
       parts.push(...enhancementsToParams(config.enhancements));
     if (config.ai) parts.push(...aiToParams(config.ai));
-    if (config.overlays) parts.push(...overlaysToParams(config.overlays));
   }
 
   if (config.type === "VIDEO") {
     if (config.basics) parts.push(...videoBasicsToParams(config.basics));
     if (config.enhancements)
       parts.push(...videoEnhancementsToParams(config.enhancements));
-    if (config.overlays) parts.push(...videoOverlaysToParams(config.overlays));
     if (config.audio) parts.push(...audioToParams(config.audio));
   }
 
-  return parts.filter(Boolean).join(",");
+  let result = parts.filter(Boolean).join(",");
+
+  if (config.overlays && config.overlays.length > 0) {
+    const overlayParts = overlaysToParams(config.overlays);
+    if (result) {
+      result += `:${overlayParts.join(":")}`;
+    } else {
+      result = overlayParts.join(":");
+    }
+  }
+
+  return result;
 }
 
 export function buildImageKitUrl(
