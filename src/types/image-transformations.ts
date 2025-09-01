@@ -39,21 +39,6 @@ export type BasicsTransform = {
 
 export type FlipMode = "h" | "v" | "h_v";
 
-export type ImageOverlay = {
-  type: "image";
-  src: string; // i
-  width?: number; // w
-  height?: number; // h
-  x?: number; // position
-  y?: number;
-  opacity?: number; // o (0–100)
-  bgColor?: string; // bg
-  border?: string; // b e.g. "5_FFF000"
-  radius?: number | "max"; // r
-  rotation?: number; // rt
-  flip?: FlipMode; // fl
-};
-
 export type TextOverlay = {
   type: "text";
   text: string; // i
@@ -63,6 +48,8 @@ export type TextOverlay = {
   backgroundColor?: string; // bg
   padding?: string; // pa shorthand
   align?: "left" | "center" | "right"; // lfo
+  x?: number; // position
+  y?: number;
   bold?: boolean;
   italic?: boolean;
   strike?: boolean;
@@ -79,6 +66,8 @@ export type GradientBlock = {
   width?: number; // w
   height?: number; // h
   radius?: number; // r
+  x?: number;
+  y?: number;
 };
 
 export type SolidBlock = {
@@ -86,11 +75,13 @@ export type SolidBlock = {
   color: string; // bg
   width?: number;
   height?: number;
+  x?: number; // position
+  y?: number;
   opacity?: number;
-  radius?: number;
+  radius?: number | "max";
 };
 
-export type Overlay = ImageOverlay | TextOverlay | GradientBlock | SolidBlock;
+export type Overlay = TextOverlay | GradientBlock | SolidBlock;
 
 export type Enhancements = {
   blur?: number; // bl (0–100)

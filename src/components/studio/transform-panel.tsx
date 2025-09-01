@@ -2,6 +2,7 @@ import {type SectionKey} from "@/components/studio/dock";
 import {TransformationConfig} from "@/types";
 
 import {ImageBasicsPanel} from "./image-basics-panel";
+import {ImageOverlaysPanel} from "./image-overlays-panel";
 
 type TransformPanelProps = {
   activeSection: SectionKey;
@@ -47,6 +48,18 @@ export function TransformPanel({
           return <>Video Basics</>;
         }
       case "overlays":
+        if (transforms.type === "IMAGE") {
+          return (
+            <ImageOverlaysPanel
+              overlays={transforms.overlays || []}
+              onOverlaysChange={overlays =>
+                onTransformChange({...transforms, overlays})
+              }
+            />
+          );
+        } else if (transforms.type === "VIDEO") {
+          return <>Video Overlays</>;
+        }
         return <p>Overlays & Effects</p>;
       case "enhancements":
         return <p>Enhancements</p>;
