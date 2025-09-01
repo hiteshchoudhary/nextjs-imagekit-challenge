@@ -1,6 +1,7 @@
 import {getMedia} from "@/actions";
 import NotFound from "@/app/not-found";
 import StudioClient from "@/components/studio/studio-client";
+import { RouteParams } from "@/types/global";
 
 const Studio = async ({params}: RouteParams) => {
   const {id} = await params;

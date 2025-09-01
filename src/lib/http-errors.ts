@@ -1,11 +1,16 @@
 export class RequestError extends Error {
+  public statusCode: number;
+  public errors?: Record<string, string[]>;
+
   constructor(
-    public statusCode: number,
+    statusCode: number,
     message: string,
-    public errors?: Record<string, string[]>
+    errors?: Record<string, string[]>
   ) {
     super(message);
     this.name = "RequestError";
+    this.statusCode = statusCode;
+    this.errors = errors;
   }
 }
 
@@ -14,7 +19,6 @@ export class ValidationError extends RequestError {
     const message = ValidationError.formatFieldErrors(fieldErrors);
     super(400, message, fieldErrors);
     this.name = "ValidationError";
-    this.errors = fieldErrors;
   }
 
   static formatFieldErrors(errors: Record<string, string[]>): string {

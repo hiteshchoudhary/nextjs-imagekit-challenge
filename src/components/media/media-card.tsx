@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import {useEffect, useRef, useState} from "react";
+import React, {useEffect, useRef, useState} from "react";
 
 import {Image, Video} from "@imagekit/next";
 import {Image as ImageIcon, Volume2, VolumeX} from "lucide-react";
@@ -35,8 +35,8 @@ const MediaCard = ({
   }, [isMuted, media.mediaType]);
 
   const handleMuteToggle = (e: React.MouseEvent) => {
-    e.preventDefault(); // Prevent navigation
-    e.stopPropagation(); // Prevent card click
+    e.preventDefault();
+    e.stopPropagation();
 
     if (onVideoMuteToggle) {
       onVideoMuteToggle(media.id, isMuted);
@@ -53,7 +53,7 @@ const MediaCard = ({
               src={media.transformedUrl || media.originalUrl}
               alt={media.fileName}
               width={400}
-              height={0} // Let it auto-calculate based on aspect ratio
+              height={0} 
               className="h-auto w-full object-cover transition-transform duration-300 group-hover:scale-105"
               loading="lazy"
               onLoad={() => setIsLoading(false)}

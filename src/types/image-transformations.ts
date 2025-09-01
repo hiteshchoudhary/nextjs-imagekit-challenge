@@ -21,69 +21,69 @@ export type FocusMode =
   | "auto"
   | "face"
   | "custom"
-  | `object-${string}`; // e.g. object-dog, object-car
+  | `object-${string}`;
 
 export type BasicsTransform = {
-  width?: number; // w
-  height?: number; // h
-  aspectRatio?: string; // ar e.g. "16-9"
-  cropMode?: CropMode; // c
-  focus?: FocusMode; // fo
-  x?: number; // for extract/custom focus
+  width?: number;
+  height?: number;
+  aspectRatio?: string;
+  cropMode?: CropMode;
+  focus?: FocusMode;
+  x?: number;
   y?: number;
   xc?: number;
   yc?: number;
-  zoom?: number; // z
-  dpr?: number | "auto"; // dpr
+  zoom?: number;
+  dpr?: number | "auto";
 };
 
 export type FlipMode = "h" | "v" | "h_v";
 
 export type ImageOverlay = {
   type: "image";
-  src: string; // i
-  width?: number; // w
-  height?: number; // h
-  x?: number; // position
+  src: string;
+  width?: number;
+  height?: number;
+  x?: number;
   y?: number;
-  opacity?: number; // o (0–100)
-  bgColor?: string; // bg
-  border?: string; // b e.g. "5_FFF000"
-  radius?: number | "max"; // r
-  rotation?: number; // rt
-  flip?: FlipMode; // fl
+  opacity?: number;
+  bgColor?: string;
+  border?: string;
+  radius?: number | "max";
+  rotation?: number;
+  flip?: FlipMode;
 };
 
 export type TextOverlay = {
   type: "text";
-  text: string; // i
-  fontSize?: number; // fs
-  fontFamily?: string; // ff
-  color?: string; // co
-  backgroundColor?: string; // bg
-  padding?: string; // pa shorthand
-  align?: "left" | "center" | "right"; // lfo
+  text: string;
+  fontSize?: number;
+  fontFamily?: string;
+  color?: string;
+  backgroundColor?: string;
+  padding?: string;
+  align?: "left" | "center" | "right";
   bold?: boolean;
   italic?: boolean;
   strike?: boolean;
-  rotation?: number; // rt
-  flip?: FlipMode; // fl
+  rotation?: number;
+  flip?: FlipMode;
 };
 
 export type GradientBlock = {
   type: "gradient";
-  direction?: number | string; // ld
-  fromColor?: string; // from
-  toColor?: string; // to
-  stopPoint?: number | string; // sp
-  width?: number; // w
-  height?: number; // h
-  radius?: number; // r
+  direction?: number | string;
+  fromColor?: string;
+  toColor?: string;
+  stopPoint?: number | string;
+  width?: number;
+  height?: number;
+  radius?: number;
 };
 
 export type SolidBlock = {
   type: "solid";
-  color: string; // bg
+  color: string;
   width?: number;
   height?: number;
   opacity?: number;
@@ -93,27 +93,27 @@ export type SolidBlock = {
 export type Overlay = ImageOverlay | TextOverlay | GradientBlock | SolidBlock;
 
 export type Enhancements = {
-  blur?: number; // bl (0–100)
-  sharpen?: number; // e-sharpen (0–10)
+  blur?: number;
+  sharpen?: number;
   shadow?: {
-    blur?: number; // bl
-    saturation?: number; // st
-    offsetX?: number; // x
-    offsetY?: number; // y
+    blur?: number;
+    saturation?: number;
+    offsetX?: number;
+    offsetY?: number;
   };
   background?: {
     type: "solid" | "blurred" | "dominant";
-    color?: string; // for solid
-    blurIntensity?: number | "auto"; // for blurred
-    brightness?: number; // -255 to 255
+    color?: string;
+    blurIntensity?: number | "auto";
+    brightness?: number;
   };
 };
 
 export type AiMagic = {
   background?: {
-    remove?: boolean; // e-removedotbg or e-bgremove
+    remove?: boolean;
     mode?: "standard" | "economy";
-    changePrompt?: string; // e-changebg
+    changePrompt?: string; 
     generativeFill?: {
       prompt?: string;
       width?: number;
@@ -122,24 +122,24 @@ export type AiMagic = {
     };
   };
   editing?: {
-    prompt?: string; // e-edit
-    retouch?: boolean; // e-retouch
-    upscale?: boolean; // e-upscale
+    prompt?: string;
+    retouch?: boolean;
+    upscale?: boolean;
   };
   shadowLighting?: {
     dropShadow?: {
-      azimuth?: number; // 0–360
-      elevation?: number; // 0–90
-      saturation?: number; // 0–100
+      azimuth?: number;
+      elevation?: number;
+      saturation?: number;
     };
   };
   generation?: {
-    textPrompt?: string; // ik-genimg
-    variation?: boolean; // e-genvar
+    textPrompt?: string;
+    variation?: boolean;
   };
   cropping?: {
     type?: "smart" | "face" | "object";
-    objectName?: string; // for object aware
+    objectName?: string;
     zoom?: number;
     width?: number;
     height?: number;

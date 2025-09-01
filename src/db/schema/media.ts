@@ -6,9 +6,13 @@ import {z} from "zod/v4";
 import {TransformationConfig} from "@/types";
 
 import {mediaTypeEnum, timestamps} from "./columns-helpers";
+import { users } from "./auth";
 
 export const media = pgTable("media", {
   id: uuid("id").defaultRandom().primaryKey(),
+    userId: text("user_id")
+    .notNull()
+    .references(() => users.id, { onDelete: "cascade" }),
   fileName: varchar("file_name", {length: 255}).notNull(),
   originalUrl: text("original_url").notNull(),
   transformedUrl: text("transformed_url").default(""),
@@ -20,6 +24,7 @@ export const media = pgTable("media", {
 });
 
 const baseSchema = createInsertSchema(media, {
+
   fileName: schema =>
     schema
       .min(1, {message: "File name is required."})

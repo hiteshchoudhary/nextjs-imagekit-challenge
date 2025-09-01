@@ -15,6 +15,20 @@
       "when": 1756557730994,
       "tag": "0001_add_tranformation_config",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1756748183609,
+      "tag": "0002_shocking_onslaught",
+      "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "7",
+      "when": 1756763492867,
+      "tag": "0003_massive_trauma",
+      "breakpoints": true
     }
   ]
 }

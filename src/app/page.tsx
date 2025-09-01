@@ -1,10 +1,16 @@
-import {Suspense} from "react";
+import { Suspense } from "react";
+import Link from "next/link";
+import type { Session } from "next-auth";
 
-import {getAllMedia} from "@/actions";
+import { getAllMedia } from "@/actions";
 import GridLoader from "@/components/media/grid-loader";
 import MasonryGrid from "@/components/media/masonry-grid";
+import { Button } from "@/components/ui/button";
+import { auth } from "@/lib/auth";
 
-export default function Home() {
+export default async function Home() {
+  const session = await auth();
+
   return (
     <>
       <div className="mt-12 sm:mt-20 sm:text-center">
@@ -29,14 +35,30 @@ export default function Home() {
       </p>
 
       <Suspense fallback={<GridLoader />}>
-        <MediaGrid />
+        <MediaGrid session={session} />
       </Suspense>
     </>
   );
 }
 
-async function MediaGrid() {
-  const result = await getAllMedia({page: 1, pageSize: 50});
+async function MediaGrid({ session }: { session: Session | null }) {
+  if (!session?.user) {
+    return (
+      <div className="py-24 text-center">
+        <h3 className="mb-4 text-lg font-medium text-gray-900 dark:text-white">
+          Please log in to upload and view your moments.
+        </h3>
+        <Button
+          asChild
+          className="cursor-pointer rounded-full bg-gradient-to-bl from-pink-400 to-pink-800 px-5 text-white"
+        >
+          <Link href="/login">Login</Link>
+        </Button>
+      </div>
+    );
+  }
+
+  const result = await getAllMedia({ page: 1, pageSize: 50 });
 
   if (!result.success) {
     return (

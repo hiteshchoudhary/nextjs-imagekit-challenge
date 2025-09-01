@@ -1,8 +1,10 @@
 "use server";
 
-import {ZodError, z} from "zod/v4";
+import { type Session } from "next-auth";
+import { ZodError, z } from "zod/v4";
 
-import {UnauthorizedError, ValidationError} from "@/lib/http-errors";
+import { auth } from "@/lib/auth";
+import { UnauthorizedError, ValidationError } from "@/lib/http-errors";
 
 type ActionOptions<T> = {
   params?: T;
@@ -10,8 +12,7 @@ type ActionOptions<T> = {
   authorize?: boolean;
 };
 
-const action = async <T>({params, schema, authorize}: ActionOptions<T>) => {
-  // Validate params if schema is provided
+const action = async <T>({ params, schema, authorize }: ActionOptions<T>) => {
   if (schema && params) {
     try {
       schema.parse(params);
@@ -25,22 +26,17 @@ const action = async <T>({params, schema, authorize}: ActionOptions<T>) => {
     }
   }
 
-  let session: boolean | null = null;
+  let session: Session | null = null;
 
   if (authorize) {
-    // TODO: Replace with actual session retrieval from your auth provider
-    // Example: const session = await getServerSession(authOptions);
-    // Example: const session = await auth();
-    // Example: const session = await getUserFromCookie();
-
-    session = true; // Replace with real auth
+    session = await auth();
 
     if (!session) {
       return new UnauthorizedError();
     }
   }
 
-  return {params, session};
+  return { params, session };
 };
 
 export default action;

@@ -7,6 +7,7 @@ import Providers from "@/components/providers";
 import {Toaster} from "@/components/ui/sonner";
 
 import "./globals.css";
+import React from "react";
 
 const onest = Onest({
   subsets: ["latin"],

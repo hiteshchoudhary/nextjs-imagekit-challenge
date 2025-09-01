@@ -134,7 +134,7 @@ export function ImageBasicsPanel({
   };
 
   return (
-    <div className="h-full flex flex-col md:overflow-y-scroll space-y-1 scrollbar-thin scrollbar-thumb-gray-300">
+    <div className="h-full flex flex-col  space-y-1 scrollbar-thin scrollbar-thumb-gray-300">
       <div>
         <Accordion type="multiple">
           <AccordionItem value="resize-crop">
