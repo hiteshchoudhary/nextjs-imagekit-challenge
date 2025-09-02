@@ -192,7 +192,12 @@ export const useImageKitUpload = () => {
           )
         );
 
-        await saveToDatabase(fileData, uploadResponse);
+        const mediaRecord = await saveToDatabase(fileData, uploadResponse);
+
+        // Update with media record
+        setFiles(prev =>
+          prev.map(f => (f.id === fileData.id ? {...f, mediaRecord} : f))
+        );
 
         return uploadResponse;
       } catch (error) {

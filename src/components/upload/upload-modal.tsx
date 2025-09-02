@@ -1,9 +1,13 @@
 "use client";
 
+import {useRouter} from "next/navigation";
+import {useState} from "react";
+
 import {
   AlertCircle,
   CheckCircle,
   Link2,
+  Loader2,
   RotateCcw,
   Upload,
   X,
@@ -36,6 +40,8 @@ const UploadModal = ({
   onOpenChange,
   uploadOptions = {},
 }: UploadModalProps) => {
+  const router = useRouter();
+  const [isNavigating, setIsNavigating] = useState(false);
   const {
     files,
     addFiles,
@@ -201,6 +207,30 @@ const UploadModal = ({
                       </Button>
                     </div>
                   )}
+
+                  {uploadFile.status === "success" &&
+                    uploadFile.mediaRecord &&
+                    files.length === 1 &&
+                    uploadFile.file.type.includes("image") && (
+                      <Button
+                        onClick={() => {
+                          setIsNavigating(true);
+                          onOpenChange(false);
+                          router.push(`/studio/${uploadFile.mediaRecord?.id}`);
+                        }}
+                        disabled={isNavigating}
+                        className="w-full bg-gradient-to-bl from-blue-400 to-blue-600"
+                      >
+                        {isNavigating ? (
+                          <>
+                            <Loader2 className="mr-2 size-4 animate-spin" />
+                            Opening...
+                          </>
+                        ) : (
+                          "Open in Editor"
+                        )}
+                      </Button>
+                    )}
                 </div>
               ))}
             </div>
