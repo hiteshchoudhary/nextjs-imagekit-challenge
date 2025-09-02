@@ -1,7 +1,7 @@
 "use client";
 
 import {useRouter} from "next/navigation";
-import {useState} from "react";
+import {useState, useEffect} from "react";
 
 import {
   AlertCircle,
@@ -42,6 +42,12 @@ const UploadModal = ({
 }: UploadModalProps) => {
   const router = useRouter();
   const [isNavigating, setIsNavigating] = useState(false);
+
+  useEffect(() => {
+    if (open) {
+      setIsNavigating(false);
+    }
+  }, [open]);
   const {
     files,
     addFiles,
